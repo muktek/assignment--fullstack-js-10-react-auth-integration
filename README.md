@@ -1,5 +1,5 @@
-# Full Stack JS Project - Authentication Part 1
-**`fullstack-js-07--auth-part-1`**
+# Full Stack JS Project - React Configuration
+**`fullstack-js-08--react-configuration`**
 
 
 ## Context
@@ -9,106 +9,131 @@ You are going to build a full stack web application with node.js + React. In ord
 - application routes
 - views
 - api layer
-  - data access [this assignment]
+  - data access
   - data models + relations (ORM)
   - RESTful routes
-- **authentication**
+- authentication
+  - initial configuration
+  - application integration
+- React
+  - **initial configuration [this assignment]**
+  - application api integration
+  - application auth integration
 
 
 ## The Assignment
-For this assignment, we will focus on configuring the application's **Authentication** feature. Authentication allows our application to *verify the identity* of a user and permit or prohibit actions accordingly.
+For this assignment, we will focus on the application's **React configuration**.
 
 ###  Overview
-You will need to configure the application so that a user can authenticate by using the following routes:
 
-*NOTE:* You will need to test the routes in Postman to confirm you've configured correctly.
+#### Assignment Components
 
-```
-POST - `/auth/register`  - Creates a new user + password
-  application/json body:
-    {"email" : "...", "password" : "..."}
+For this assignment you will need to complete 2 principle tasks:
 
-POST - `/auth/login`     - A user authenticates with user + password
-  application/json body:
-    {"email" : "...", "password" : "..."}
+- **(A) configure React in our node application**  
+- **(B) create our application React components**
 
-GET  - `/auth/logout`    - Logs out a user
+#### (A) Configuring React
 
-GET  - `/auth/current`   - Checks for a user's current authenticated session.
-```
+In the context of our full stack application requires four things:
 
+1. Creating files/folders for React in our application
+
+2. Installing + configuring React build tools (webpack and babel) for converting React JSX to normal javascript.
+
+3. Adjust our `npm run dev` command in `package.json` to watch for changes in our react source files.
+
+4. Configure the express application to send an `.ejs` file that contains our React application.
+
+We will use the yemoan `nxkplus` generator for parts 1 + 2, and you will have instructions for parts 3 + 4 in the *Requirements* section below.
+
+#### (B) Create Application React Components
+
+You will need to create the react components for our specific application:
+- `JobListings`
+- `CompanyListings`
+- `LoginForm`
+- `RegisterForm`
+- `NoMatch404`
 
 
 ### Requirements
-In order to complete this assignment, you will need to:
 
-- [x] **Install yeoman + nxkplus generator**
-  ```sh
-  npm install -g yo
-  npm install -g generator-nxkplus
+#### (A) Configuring React
 
-  # check for prompt
-  yo nxkplus
-  ```
-
-- [x] **Run the nxkplus authentication generator**
+- [x] **- [x] **Run the nxkplus react generator**
   ```sh
   yo nxkplus:auth
   ```
+  - installs webpack/babel libraries  
+  - generates React config files:
+    - `webpack.config.js`
+    - `.babelrc`
+  - install react, react-dom, react-dom-router libraries
+  - generates application files/folders
+    - `/src/client/js`
+    - `/src/client/js/App.js`
+    - `/src/views/reactApp.ejs`
 
-- [x] **Import the libraries + middleware**
+- [x] **- [x] **Configure `package.json` dev build scripts**
+  - this tells our `npm run dev` command also to run webpack/babel on our `/client/js` folder
+
   ```js
-  const passport = require('passport')
-  const cookieSession = require('cookie-session')
-  const cookieParser = require('cookie-parser')
-
-  const registerLocalStrategy = require('./src/middleware/passport-local--registerLocalStrategy.js')
-  const { configDeserializeUser, configSerializeUser } = require('./src/helpers/passport-local--sessionActions.js')
-  ```
-
-- [x] **Configure libraries + middleware w/ application**
-  ```js
-  // Cookie Parse + Cookie Session middleware
-  app.use(cookieParser())
-  app.use(cookieSession({
-    name: 'cookiemonster',
-    secret: 'superdupersupersecret',
-    httpOnly: true,
-    signed: false
-  }))
-
-  // Passport middleware
-  app.use(passport.initialize())
-  app.use(passport.session())
-  passport.use(registerLocalStrategy())
-  passport.serializeUser(configSerializeUser())
-  passport.deserializeUser(configDeserializeUser())
-  ```
-
-- [x] **Import `authRouter.js` and create router middleware**
-  ```js
-  const authRouter = require('./src/routes/authRouter.js')
-
   ...
-
-  app.use('/auth', authRouter)
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:server dev:webpack",
+    "dev:webpack": "./node_modules/.bin/webpack --watch",
+    "dev:server": "NODE_ENV=development nodemon server.js --watch src --watch server.js --ignore src/client",
+    ...
+  }
   ```
 
-+ [x] **Test Routes in Postman**
-  + POST - `/auth/register`
-    + application/json body:
-    ```
-    {"email" : "testeracct@mail.com", "password": "1234"}
-    ```
-  + POST - `/auth/login`
-    + application/json body:
-    ```
-    {"email" : "testeracct@mail.com", "password": "1234"}
-    ```
+- [x] **Configure `server.js` to send `reactApp.js` view**
+  - if no routes match, send `reactApp.ejs` to client.
+  ```js
+  ...
+  app.use('/api', apiRouter)
+  app.use('/auth', authRouter)
+  app.use('/', pageRouter)
 
-  + GET - `/auth/login`
+  app.use((req, res)=>{
+    res.render('reactApp.ejs')
+  })
+  ...
+  ```
 
-  + GET - `/auth/logout`
+- [x] **Run `npm run dev` Test routes in browser**
+  - In Terminal:
+  ```sh
+  npm run dev
+  ```
+
+  - In Browser:
+    - `http://localhost:3000/demo` : (demo route)
+    - `http://localhost:3000/ex/:value` (dynamic route)
+    - `http://localhost:3000/pagenotfound` (404, pagenotfound route)
+
+  - In Atom:
+    - make changes to `App.js` and see that they work in browser.
+
+
+#### (B) Configuring React in Application
+
+- [x] **Download + unzip component folder with files into `src/client/js/`**
+```sh
+curl https://raw.githubusercontent.com/muktek/assignment--fullstack-js-08-react-integration/master/components-files.zip > components-files.zip
+
+unzip components-files.zip -d /src/client/js
+```
+
+- [x] **Import components into `App.js` and configure React router**
+  ```
+  /companies -- CompanyListings
+  /jobs      -- JobListings
+  /login     -- Login}/>
+  /register   -- RegisterForm
+  *            -- NoMatch404
+  ```
 
 ## Setup Instructions
 
@@ -120,17 +145,9 @@ cd ~/Documents/muktek/assignments/project--devjobs
 
 # (2) Commit your changes from the previous demo
 git add .
-git commit -m 'committing work from part-06-rest-api'
+git commit -m 'committing work from part-07-auth-1'
 
-# (3) You will work on the part-06-rest-api branch for this feature
-git checkout -b part-07-auth-part-1
+# (3) You will work on the part-08-react-configuration branch for this feature
+git checkout -b part-08-react-configuration
 
-```
-
-### Adventure Mode
-
-Create the DELETE route for companies. To make this work, you will need query and delete the related jobs that have the companyId as a foreign key.
-
-```
-DELETE - `/api/companies/:id` - Deletes a company (and it's jobs)
 ```
