@@ -1,5 +1,5 @@
-# Full Stack JS Project - React Configuration
-**`fullstack-js-08--react-configuration`**
+# Full Stack JS Project - React API Integration
+**`fullstack-js-09--react-api-integration`**
 
 
 ## Context
@@ -16,124 +16,37 @@ You are going to build a full stack web application with node.js + React. In ord
   - initial configuration
   - application integration
 - React
-  - **initial configuration [this assignment]**
-  - application api integration
+  - initial configuration
+  - **application api integration [this assignment]**
   - application auth integration
 
 
 ## The Assignment
-For this assignment, we will focus on the application's **React configuration**.
+For this assignment, we will focus on the application's **React application API integration**.
 
 ###  Overview
 
-#### Assignment Components
+For this assignment you will need to integrate data from the companies and jobs tables into your React application and render Job and Company components for each record.
 
-For this assignment you will need to complete 2 principle tasks:
+You will do this by making a request (using the superagent promise library) to the data exposed from our API at the `/api/jobs` and `/api/companies` endpoints from the `CompanyListings` and `JobListings` components.
 
-- **(A) configure React in our node application**  
-- **(B) create our application React components**
+`CompanyListings` and `JobListings` components should update their state when the requested data returns from the api.
 
-#### (A) Configuring React
-
-In the context of our full stack application requires four things:
-
-1. Creating files/folders for React in our application
-
-2. Installing + configuring React build tools (webpack and babel) for converting React JSX to normal javascript.
-
-3. Adjust our `npm run dev` command in `package.json` to watch for changes in our react source files.
-
-4. Configure the express application to send an `.ejs` file that contains our React application.
-
-We will use the yemoan `nxkplus` generator for parts 1 + 2, and you will have instructions for parts 3 + 4 in the *Requirements* section below.
-
-#### (B) Create Application React Components
-
-You will need to create the react components for our specific application:
-- `JobListings`
-- `CompanyListings`
-- `LoginForm`
-- `RegisterForm`
-- `NoMatch404`
+You will need to map over an array of the returned data to create `Job` components and `Company`.
 
 
-### Requirements
+###  Demo
 
-#### (A) Configuring React
+#### Job Listing Demo
 
-- [x] **- [x] **Run the nxkplus react generator**
-  ```sh
-  yo nxkplus:auth
-  ```
-  - installs webpack/babel libraries  
-  - generates React config files:
-    - `webpack.config.js`
-    - `.babelrc`
-  - install react, react-dom, react-dom-router libraries
-  - generates application files/folders
-    - `/src/client/js`
-    - `/src/client/js/App.js`
-    - `/src/views/reactApp.ejs`
+![job listings](demos/job-listing-demo.png)
 
-- [x] **- [x] **Configure `package.json` dev build scripts**
-  - this tells our `npm run dev` command also to run webpack/babel on our `/client/js` folder
+#### Company Listing Demo
 
-  ```js
-  ...
-  "scripts": {
-    "dev": "npm-run-all --parallel dev:server dev:webpack",
-    "dev:webpack": "./node_modules/.bin/webpack --watch",
-    "dev:server": "NODE_ENV=development nodemon server.js --watch src --watch server.js --ignore src/client",
-    ...
-  }
-  ```
-
-- [x] **Configure `server.js` to send `reactApp.js` view**
-  - if no routes match, send `reactApp.ejs` to client.
-  ```js
-  ...
-  app.use('/api', apiRouter)
-  app.use('/auth', authRouter)
-  app.use('/', pageRouter)
-
-  app.use((req, res)=>{
-    res.render('reactApp.ejs')
-  })
-  ...
-  ```
-
-- [x] **Run `npm run dev` Test routes in browser**
-  - In Terminal:
-  ```sh
-  npm run dev
-  ```
-
-  - In Browser:
-    - `http://localhost:3000/demo` : (demo route)
-    - `http://localhost:3000/ex/:value` (dynamic route)
-    - `http://localhost:3000/pagenotfound` (404, pagenotfound route)
-
-  - In Atom:
-    - make changes to `App.js` and see that they work in browser.
+![company listings](demos/company-listing-demo.png)
 
 
-#### (B) Configuring React in Application
 
-- [x] **Download + unzip component folder with files into `src/client/js/`**
-```sh
-curl https://raw.githubusercontent.com/muktek/assignment--fullstack-js-08-react-integration/master/components-files.zip > components-files.zip
-
-unzip components-files.zip -d /src/client/js
-```
-
-- [x] **Import components into `App.js` and configure React router**
-  ```
-  /companies -- CompanyListings
-  /jobs      -- JobListings
-  /login     -- Login}/>
-  /register   -- RegisterForm
-  *            -- NoMatch404
-  ```
 
 ## Setup Instructions
 
@@ -148,6 +61,20 @@ git add .
 git commit -m 'committing work from part-07-auth-1'
 
 # (3) You will work on the part-08-react-configuration branch for this feature
-git checkout -b part-08-react-configuration
+git checkout -b part-09-react-api-integration
 
+# (4a) Download + Unzip project styles
+curl https://raw.githubusercontent.com/muktek/assignment--fullstack-js-09-react-integration/master/style-css.zip > style-css.zip
+
+unzip style-css.zip -d public/css/styles.css
+
+# (4b) Download + Unzip Job, Company, Nav components
+
+curl https://raw.githubusercontent.com/muktek/assignment--fullstack-js-09-react-integration/master/job-company-nav-components.zip > job-company-nav-components.zip
+
+unzip job-company-nav-components.zip -d src/client/js/components/
+
+
+# (5) Install superagent promise library
+npm install --save superagent
 ```

@@ -37,7 +37,10 @@ export default class Nav extends React.Component {
           <a className="nav__link nav__link-home" href="/">&lt; <i className="ion-ios-home-outline"/> &gt;</a>
         </div>
         <div>
-          {routesJsx}
+          {
+            routes
+          }
+
         </div>
       </div>
   }
