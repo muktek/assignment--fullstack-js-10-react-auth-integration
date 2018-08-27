@@ -15,42 +15,67 @@ You are going to build a full stack web application with node.js + React. In ord
 - authentication
   - initial configuration
   - application integration
+  - protected routes
 - React
   - initial configuration
-  - **application api integration [this assignment]**
-  - application auth integration
-
+  - application api integration
+  - **application auth integration** [this assignment]
+  - application api integration w/ protected routes
 
 ## The Assignment
-For this assignment, we will focus on the application's **React application API integration**.
+Create the React components that allow a user to register, login, and logout. When a user logs in, they should
 
 ###  Overview
 
-For this assignment you will need to integrate data from the companies and jobs tables into your React application and render Job and Company components for each record.
+For this assignment you will need to configure the React components to connect to the backend authentication. You will need
 
 ###  Requirements
 
-+ Install superagent as project dependency
++ Install react-notification-system as project dependency
 
-  `npm install --save superagent`
+  `npm install --save react-notification-system`
 
-+ You will do this by making a request (using the superagent promise library) to the data exposed from our API at the `/api/jobs` and `/api/companies` endpoints from the `CompanyListings` and `JobListings` components in the `componentWillMount(){...}` lifeccyle method.
++ Configure `RegisterForm.js` so that user can register a new account
 
-- The `CompanyListings` and `JobListings` components should update their state with an array of the returned data when the requested data returns from the api.
+  + Successful authentication should: route the user to the `/login`
 
-- Inside of the `render()` function for the `CompanyListings` and `JobListings`, you will need to return a mapped array of `Job`  and `Company` components
+  + Failed authentication should: show a react-notification-system error
 
-- Inside the `.map()...`, You will need to pass props data for the `Job` and `Company` components.
++ Configure `LoginForm.js` so that user can authenticate.
 
-### Expected Results
+   + Successful authentication should: route the user to the `/dashboard`
 
-#### Job Listing Demo
+   + Failed authentication should: show a react-notification-system error message
 
-![job listings](demos/job-listing-demo.png)
+   + Update the `App` component's state with the authenticated user returned from the POST query to `/auth/login`
 
-#### Company Listing Demo
++ Configure `App.js` component to check the `/auth/current` route for an authenticated user's session when the app initializes.
+  + Pass global app state to `Nav` component and the `Dashboard` components.
 
-![company listings](demos/company-listing-demo.png)
++ Configure `Nav.js` component
+
+  + If there is an authenticated user (received as props from `App` component): the navbar should create `NavLink` to the *Dashboard* and a *Logout* button
+    - The *Dashboard* button allows the user to navigate to the `/dashboard` route
+    - The *Logout* button allows the user to send a POST request to `/auth/logout`, then routes the user to login.
+
+  + If there is NO authenticated user: the navbar should create a `NavLink` for _Sign In_ and _Log In_ buttons
+
+  + NOTE: make sure that you configure the `Nav` component with React Router's `withRouter` so that the `Nav` component can receive pass route information.
+
++ Configure `Dashboard.js` component
+
+  + If there is NO authenticated user, the component should re-route the user to the `/login` route
+
+### Expected Functionality
+
+
+#### `RegisterForm.js`
+
+
+#### `LoginForm.js`
+
+
+#### `Dashboard.js`
 
 
 
@@ -65,9 +90,15 @@ cd ~/Documents/muktek/assignments/project--devjobs
 
 # (2) Commit your changes from the previous demo
 git add .
-git commit -m 'committing work from part-08-react-config'
+git commit -m 'committing work from part-09-react-api-integration'
 
-# (3) You will work on the part-09-react-api-integration branch for this feature
-git checkout -b part-09-react-api-integration
+
+# (3) Merge changes to master
+git checkout master
+git merge part-09-react-api-integration
+
+
+# (4) You will work on the part-09-react-api-integration branch for this feature
+git checkout -b part-10-react-auth-integration
 
 ```
