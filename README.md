@@ -35,47 +35,59 @@ For this assignment you will need to configure the React components to connect t
 
   `npm install --save react-notification-system`
 
-+ Configure `RegisterForm.js` so that user can register a new account
++ Configure `RegisterForm` so that user can register a new account using the application's authentication API (sends a POST request to `/auth/register`)
+  + Handle basic submission errors (no email, no password, incorrect password + confirmation) with react-notification-system library.
 
-  + Successful authentication should: route the user to the `/login`
++ Configure `LoginForm` so that user can authenticate.
+  + Handle basic submission errors (no email, no password, incorrect password + confirmation) with react-notification-system library.
+  + Successful login should send user to the `/dashboard` route
 
-  + Failed authentication should: show a react-notification-system error
++ Configure `Nav` component to show proper navlink buttons based on if a user is authenticated.
+  + For unauthenticated users : _Login_ and _Sign Up_ buttons should render.
+  + For authenticated users: _Dashboard_ and _Logout_ buttons should appear.
+  + There should be a _Logout_ button that should respond to a click event by sending a POST request to `/auth/logout`.
 
-+ Configure `LoginForm.js` so that user can authenticate.
++ Configure `Dashboard.js` component to block unauthenticated user from using the dashboard.
 
-   + Successful authentication should: route the user to the `/dashboard`
++ Configure `App` component to check the `/auth/current` route for an authenticated user's session when the app initializes.
+  + If there is a current user, then put the server's response on the `App` component's state
 
-   + Failed authentication should: show a react-notification-system error message
 
-   + Update the `App` component's state with the authenticated user returned from the POST query to `/auth/login`
-
-+ Configure `App.js` component to check the `/auth/current` route for an authenticated user's session when the app initializes.
-  + Pass global app state to `Nav` component and the `Dashboard` components.
-
-+ Configure `Nav.js` component
-
-  + If there is an authenticated user (received as props from `App` component): the navbar should create `NavLink` to the *Dashboard* and a *Logout* button
-    - The *Dashboard* button allows the user to navigate to the `/dashboard` route
-    - The *Logout* button allows the user to send a POST request to `/auth/logout`, then routes the user to login.
-
-  + If there is NO authenticated user: the navbar should create a `NavLink` for _Sign In_ and _Log In_ buttons
-
-  + NOTE: make sure that you configure the `Nav` component with React Router's `withRouter` so that the `Nav` component can receive pass route information.
-
-+ Configure `Dashboard.js` component
-
-  + If there is NO authenticated user, the component should re-route the user to the `/login` route
 
 ### Expected Functionality
 
 
-#### `RegisterForm.js`
+#### Registering Users
+  + `RegisterForm` validates improper submission, and shows an error notification
+
+  + `RegisterForm` creates a new user with a POST request to `/auth/register`) if submission fields are valid
+
+  ![register demo](demos/register-demo.gif)
 
 
-#### `LoginForm.js`
+#### Authenticating Users
+
+  + `LoginForm` authenticates a user by sending their credentials in a POST request to `/auth/login`
+
+  + Successful authentication sends user to `/dashboard`
+
+  + Unsuccessful authentication shows an error notification
+
+  ![login demo](demos/login-demo.gif)
 
 
-#### `Dashboard.js`
+#### Logging Out + Restricting Dashboard Access
+  + _Logout_ `<span>` element on `Nav` should log out the user with a POST request to `/auth/logout` and route the user to the `/login` route
+
+  + When logged out, access to `/dashboard` route is restricted
+
+  ![logout demo](demos/login-logout-demo.gif)
+
+#### App Checks for Authenticated User
+
+  + When user refreshes the page or navigates away and returns, they should still be able to access the Dashboard on the `/dashboard` route
+
+  ![demo app session](demos/demo-appsession.gif)
 
 
 
